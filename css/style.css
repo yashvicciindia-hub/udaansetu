@@ -976,3 +976,429 @@ tr:last-child td { border-bottom: none; }
   .eco-cross-row { flex-direction: column; gap: 12px; }
   .eco-h-line { width: 2px; height: 28px; background: repeating-linear-gradient(180deg, var(--green-500) 0 6px, transparent 6px 12px); }
 }
+
+/* ---------- UdaanSetu Assistant ---------- */
+#udaansetu-chatbot-root {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 220;
+  font-family: var(--font-body);
+}
+
+.udaansetu-launcher {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  border: none;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--navy-900) 0%, var(--green-600) 100%);
+  color: var(--white);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 18px 40px rgba(25, 56, 58, 0.26);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  animation: launcherPulse 3s ease-in-out infinite;
+}
+.udaansetu-launcher:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 22px 48px rgba(25, 56, 58, 0.28);
+}
+.udaansetu-launcher.is-open {
+  transform: scale(0.96);
+}
+.udaansetu-launcher-pulse {
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: 1px solid rgba(130, 145, 61, 0.35);
+  animation: launcherRing 2.8s ease-out infinite;
+}
+.udaansetu-launcher-icon {
+  width: 28px;
+  height: 28px;
+  display: block;
+  position: relative;
+  z-index: 1;
+}
+.udaansetu-launcher-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes launcherPulse {
+  0%, 100% { box-shadow: 0 10px 26px rgba(25, 56, 58, 0.2); }
+  50% { box-shadow: 0 16px 40px rgba(25, 56, 58, 0.28); }
+}
+@keyframes launcherRing {
+  0% { transform: scale(0.9); opacity: 0.9; }
+  80% { transform: scale(1.22); opacity: 0; }
+  100% { opacity: 0; }
+}
+
+.udaansetu-chat-widget {
+  position: absolute;
+  right: 0;
+  bottom: 78px;
+  width: min(410px, calc(100vw - 24px));
+  height: min(620px, calc(100vh - 110px));
+  background: rgba(255,255,255,0.9);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(15, 41, 52, 0.1);
+  border-radius: 26px;
+  box-shadow: 0 20px 50px rgba(12, 31, 46, 0.18);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(14px) scale(0.98);
+  transition: opacity 0.22s ease, transform 0.22s ease, visibility 0.22s ease;
+}
+.udaansetu-chat-widget.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+.udaansetu-chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 18px 16px;
+  background: linear-gradient(135deg, rgba(24, 54, 58, 0.97), rgba(82, 100, 31, 0.9));
+  color: var(--white);
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+}
+.udaansetu-header-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.udaansetu-header-icon {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.14);
+  border: 1px solid rgba(255,255,255,0.12);
+  flex-shrink: 0;
+}
+.udaansetu-header-icon svg {
+  width: 22px;
+  height: 22px;
+  color: var(--white);
+}
+.udaansetu-header-brand h3 {
+  margin: 0 0 2px;
+  color: var(--white);
+  font-size: 1rem;
+  font-family: var(--font-body);
+  letter-spacing: -0.02em;
+}
+.udaansetu-header-brand p {
+  margin: 0;
+  color: rgba(255,255,255,0.74);
+  font-size: 0.7rem;
+  line-height: 1.25;
+  white-space: normal;
+}
+.udaansetu-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.udaansetu-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.84);
+  background: rgba(255,255,255,0.09);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 999px;
+  padding: 5px 8px;
+}
+.udaansetu-status .dot {
+  width: 8px;
+  height: 8px;
+  background: #48d68a;
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px rgba(72, 214, 138, 0.15);
+}
+.udaansetu-icon-button {
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  color: var(--white);
+  font-size: 1.15rem;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+.udaansetu-clear-confirm {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(13, 35, 40, 0.38);
+  backdrop-filter: blur(3px);
+  z-index: 2;
+}
+.udaansetu-clear-confirm.hidden {
+  display: none;
+}
+.udaansetu-dialog {
+  width: min(260px, calc(100% - 36px));
+  background: var(--white);
+  border-radius: 18px;
+  padding: 18px 16px 14px;
+  box-shadow: var(--shadow-lg);
+}
+.udaansetu-dialog p {
+  margin: 0 0 16px;
+  color: var(--ink-900);
+  font-weight: 600;
+  text-align: center;
+}
+.udaansetu-dialog-actions {
+  display: flex;
+  gap: 10px;
+}
+.udaansetu-dialog-actions button {
+  flex: 1;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.udaansetu-cancel {
+  background: var(--cream-100);
+  color: var(--navy-900);
+}
+.udaansetu-clear-action {
+  background: var(--terracotta-600);
+  color: var(--white);
+}
+
+.udaansetu-chat-body {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, rgba(249,246,241,0.96), rgba(255,255,255,1));
+}
+.udaansetu-message-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 14px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.udaansetu-message {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  animation: chatFade 0.25s ease;
+}
+.udaansetu-message.user {
+  justify-content: flex-end;
+}
+.udaansetu-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, var(--green-600), var(--navy-800));
+  color: var(--white);
+  font-size: 0.72rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-bottom: 10px;
+}
+.udaansetu-bubble-wrap {
+  max-width: 82%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.udaansetu-message.user .udaansetu-bubble-wrap {
+  align-items: flex-end;
+}
+.udaansetu-bubble-meta {
+  font-size: 0.62rem;
+  color: var(--ink-500);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0 4px;
+}
+.udaansetu-bubble {
+  padding: 12px 14px;
+  border-radius: 16px 16px 16px 6px;
+  background: var(--white);
+  border: 1px solid rgba(23, 56, 66, 0.08);
+  color: var(--ink-900);
+  line-height: 1.52;
+  box-shadow: 0 8px 18px rgba(19, 47, 59, 0.05);
+  white-space: pre-line;
+  word-break: break-word;
+}
+.udaansetu-message.user .udaansetu-bubble {
+  background: linear-gradient(135deg, var(--green-700), var(--green-600));
+  color: var(--white);
+  border: none;
+  border-radius: 16px 16px 6px 16px;
+  box-shadow: 0 10px 22px rgba(72, 104, 53, 0.18);
+}
+.udaansetu-suggestions {
+  padding: 10px 12px 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  border-top: 1px solid rgba(19, 47, 59, 0.08);
+  background: rgba(255,255,255,0.6);
+}
+.udaansetu-suggestion {
+  border: 1px solid rgba(25, 56, 58, 0.1);
+  background: rgba(255,255,255,0.8);
+  color: var(--navy-900);
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.18s ease, transform 0.18s ease, background 0.18s ease;
+}
+.udaansetu-suggestion:hover {
+  border-color: rgba(82, 100, 31, 0.28);
+  background: rgba(233, 236, 215, 0.7);
+  transform: translateY(-1px);
+}
+
+.udaansetu-chat-form {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  padding: 12px 12px 14px;
+  border-top: 1px solid rgba(19,47,59,0.08);
+  background: rgba(255,255,255,0.92);
+}
+.udaansetu-chat-form textarea {
+  flex: 1;
+  min-height: 44px;
+  max-height: 130px;
+  resize: none;
+  border: 1px solid rgba(25,56,58,0.12);
+  background: rgba(245,247,244,0.9);
+  color: var(--ink-900);
+  border-radius: 14px;
+  padding: 12px 14px;
+  font: inherit;
+  line-height: 1.4;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.udaansetu-chat-form textarea:focus {
+  outline: none;
+  border-color: rgba(82,100,31,0.55);
+  box-shadow: 0 0 0 3px rgba(129, 145, 61, 0.12);
+}
+.udaansetu-send-button {
+  width: 46px;
+  height: 46px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--navy-900), var(--green-600));
+  color: var(--white);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(25, 56, 58, 0.12);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.udaansetu-send-button:hover {
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 0 12px 24px rgba(25, 56, 58, 0.18);
+}
+.udaansetu-send-button svg {
+  width: 17px;
+  height: 17px;
+}
+.udaansetu-send-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.typing-bubble {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  width: auto;
+  min-width: 76px;
+  justify-content: center;
+}
+.typing-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(24,54,58,0.62);
+  animation: typingBounce 1s ease-in-out infinite;
+}
+.typing-dot:nth-child(2) { animation-delay: 0.15s; }
+.typing-dot:nth-child(3) { animation-delay: 0.3s; }
+@keyframes typingBounce {
+  0%, 80%, 100% { transform: translateY(0); opacity: 0.45; }
+  40% { transform: translateY(-4px); opacity: 1; }
+}
+@keyframes chatFade {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 640px) {
+  #udaansetu-chatbot-root {
+    right: 12px;
+    bottom: 12px;
+  }
+  .udaansetu-chat-widget {
+    right: 0;
+    bottom: 72px;
+    width: min(100vw - 12px, 420px);
+    height: min(72vh, 580px);
+    border-radius: 22px;
+  }
+  .udaansetu-chat-header {
+    padding: 14px 14px 12px;
+  }
+  .udaansetu-header-brand h3 {
+    font-size: 0.92rem;
+  }
+  .udaansetu-header-brand p {
+    font-size: 0.62rem;
+  }
+  .udaansetu-suggestion {
+    font-size: 0.72rem;
+  }
+}
